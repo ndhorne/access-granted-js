@@ -44,21 +44,6 @@ window.addEventListener("keydown", event => {
   }
 });
 
-function about(event) {
-  alert("Access Granted\n" +
-    "\n" +
-    "A Diversion by Nicholas D. Horne\n" +
-    "\n" +
-    "Can you actually crack a four-digit PIN on your\n" +
-    "first attempt as seen in the movies on a telltale\n" +
-    "worn keypad? The \"worn\" keys contained in the\n" +
-    "PIN have been highlighted on the keypad. PINs\n" +
-    "are four digits in length. Digits may be repeated\n" +
-    "resulting in PINs with less than four keys being\n" +
-    "highlighted. PINs may begin with zero.\n");
-  event.preventDefault();
-}
-
 function updateDisplay() {
   lcd.style.backgroundColor = "darkgrey";
   lcd.textContent = entry;
@@ -123,6 +108,24 @@ function verifyEntry() {
   entry = "";
 }
 
+function about(event) {
+  alert("Access Granted JS\n" +
+    "\n" +
+    "A pointless diversion by Nicholas D. Horne\n" +
+    "\n" +
+    "Can you actually crack a four-digit PIN on your\n" +
+    "first attempt as seen in the movies on a telltale\n" +
+    "worn keypad? The \"worn\" keys contained in the\n" +
+    "PIN have been highlighted on the keypad. PINs\n" +
+    "are four digits in length. Digits may be repeated\n" +
+    "resulting in PINs with less than four keys being\n" +
+    "highlighted. PINs may begin with zero. Input is\n" +
+    "accepted by way of both mouse primary button\n" +
+    "and keyboard number keys.");
+  event.preventDefault();
+}
+
 pinGen();
+
 //display instructions dialog box upon page load
-//window.addEventListener("load", event => about(event));
+window.addEventListener("load", event => about(event));
