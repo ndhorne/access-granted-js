@@ -72,18 +72,23 @@ function updateEntries() {
 }
 
 function pinGen() {
-  pin = "";
+  let pin = "";
   for (let i = 0; i < 4; i++) {
     pin += Math.floor(Math.random() * 10);
   }
   //print PIN to console for debugging (or cheating)
   //console.log(pin);
+  return pin;
+}
+
+function initGame() {
+  pin = pinGen();
   highlightKeys();
 }
 
 function newGame(event) {
   event.preventDefault();
-  pinGen();
+  initGame();
   entry = "";
   entries = [];
   updateDisplay();
@@ -98,7 +103,7 @@ function verifyEntry() {
     alert("PIN " + pin + " cracked in " + entries.length +
       " attempt" + (entries.length > 1 ? "s" : ""));
     entries = [];
-    pinGen();
+    initGame();
   } else {
     lcd.textContent = "Access Denied";
     lcd.style.backgroundColor = "red";
@@ -125,7 +130,7 @@ function about(event) {
   event.preventDefault();
 }
 
-pinGen();
+initGame();
 
 //display instructions dialog box upon page load
 window.addEventListener("load", event => about(event));
