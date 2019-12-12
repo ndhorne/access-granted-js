@@ -1,5 +1,5 @@
 # access-granted-js
-Access Granted
+Access Granted JS
 
 A diversion brought to you by Nicholas D. Horne
 
@@ -11,4 +11,6 @@ worn keypad? The "worn" keys contained in the
 PIN have been highlighted on the keypad. PINs
 are four digits in length. Digits may be repeated
 resulting in PINs with less than four keys being
-highlighted. PINs may begin with zero.
+highlighted. PINs may begin with zero. Input is
+accepted by way of both mouse primary button
+and keyboard number keys.
