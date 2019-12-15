@@ -14,10 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+"use strict";
 
-let pin;
-let entry = "";
-let entries = [];
+let pin, entry, entries;
 let buttons = [];
 let lcd = document.getElementById("lcd");
 let resetDisplayTimeout;
@@ -72,6 +71,7 @@ function updateEntries() {
 }
 
 function pinGen() {
+  //shadow pin binding residing in global scope
   let pin = "";
   for (let i = 0; i < 4; i++) {
     pin += Math.floor(Math.random() * 10);
@@ -83,15 +83,10 @@ function pinGen() {
 
 function initGame() {
   pin = pinGen();
-  highlightKeys();
-}
-
-function newGame(event) {
-  event.preventDefault();
-  initGame();
   entry = "";
   entries = [];
   updateDisplay();
+  highlightKeys();
 }
 
 function verifyEntry() {
@@ -102,15 +97,19 @@ function verifyEntry() {
     updateEntries();
     alert("PIN " + pin + " cracked in " + entries.length +
       " attempt" + (entries.length > 1 ? "s" : ""));
-    entries = [];
     initGame();
   } else {
     lcd.textContent = "Access Denied";
     lcd.style.backgroundColor = "red";
     resetDisplayTimeout = setTimeout(() => updateDisplay(), 1500);
     updateEntries();
+    entry = "";
   }
-  entry = "";
+}
+
+function newGame(event) {
+  event.preventDefault();
+  initGame();
 }
 
 function about(event) {
