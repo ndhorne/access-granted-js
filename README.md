@@ -14,3 +14,5 @@ resulting in PINs with less than four keys being
 highlighted. PINs may begin with zero. Input is
 accepted by way of both mouse primary button
 and keyboard number keys.
+
+Source available at https://github.com/ndhorne
