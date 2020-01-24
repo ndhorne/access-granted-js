@@ -1,5 +1,5 @@
 /*
-Copyright 2018, 2019 Nicholas D. Horne
+Copyright 2018-2020 Nicholas D. Horne
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -85,7 +85,6 @@ function initGame() {
   pin = pinGen();
   entry = "";
   entries = [];
-  updateDisplay();
   highlightKeys();
 }
 
