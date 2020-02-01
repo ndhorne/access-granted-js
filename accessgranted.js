@@ -109,6 +109,7 @@ function verifyEntry() {
 function newGame(event) {
   event.preventDefault();
   initGame();
+  updateDisplay();
 }
 
 function about(event) {
