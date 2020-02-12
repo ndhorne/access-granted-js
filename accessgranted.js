@@ -16,7 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 "use strict";
 
-let pin, entry, entries;
+let pin, entry, entries, status;
 let buttons = [];
 let lcd = document.getElementById("lcd");
 let resetDisplayTimeout;
@@ -94,26 +94,30 @@ function verifyEntry() {
     lcd.style.backgroundColor = "green";
     resetDisplayTimeout = setTimeout(() => updateDisplay(), 3000);
     updateEntries();
-    alert("PIN " + pin + " cracked in " + entries.length +
-      " attempt" + (entries.length > 1 ? "s" : ""));
+    status = "PIN " + pin + " cracked in " + entries.length +
+      " attempt" + (entries.length > 1 ? "s" : "");
+    alert(status);
     initGame();
+    return true;
   } else {
     lcd.textContent = "Access Denied";
     lcd.style.backgroundColor = "red";
     resetDisplayTimeout = setTimeout(() => updateDisplay(), 1500);
     updateEntries();
     entry = "";
+    return false;
   }
 }
 
 function newGame(event) {
-  event.preventDefault();
   initGame();
   updateDisplay();
+  event.preventDefault();
 }
 
 function about(event) {
-  alert("Access Granted JS\n" +
+  let aboutText =
+    "Access Granted JS\n" +
     "\n" +
     "A pointless diversion by Nicholas D. Horne\n" +
     "\n" +
@@ -127,7 +131,83 @@ function about(event) {
     "accepted by way of both mouse primary button\n" +
     "and keyboard number keys.\n" +
     "\n" +
-    "Source available at https://github.com/ndhorne");
+    "Source available at https://github.com/ndhorne";
+  alert(aboutText);
+  event.preventDefault();
+}
+
+function autoSolve(event) {
+  let uniqueDigits = [];
+  let inferences = [];
+  let solved = false;
+  
+  for (let i = 0; i <= 9; i++) {
+    if (pin.includes(i) && !uniqueDigits.includes(i)) {
+      uniqueDigits.push(i);
+    }
+  }
+  
+  if (uniqueDigits.length == 4) {
+    inferences.push(uniqueDigits.join(""));
+  } else if (uniqueDigits.length == 3) {
+    for (let i = 0; i <= 2; i++) {
+      inferences.push(uniqueDigits.join("") + uniqueDigits[i]);
+    }
+  } else if (uniqueDigits.length == 2) {
+    for (let i = 0; i <= 1; i++) {
+      inferences.push(uniqueDigits.join("") + uniqueDigits[i] +
+        uniqueDigits[i]);
+    }
+    inferences.push(uniqueDigits.join("") + uniqueDigits[0] +
+      uniqueDigits[1]);
+  } else if (uniqueDigits.length == 1) {
+    inferences.push(uniqueDigits.join("") + uniqueDigits[0] +
+      uniqueDigits[0] + uniqueDigits[0]);
+  } else {
+    console.log("uniqueDigits has bad length");
+  }
+  
+  for (let inference of inferences) {
+    let i;
+    
+    for(let j = 0; j <= 3; j++) {
+      i = inference.slice(0);
+      
+      if (j == 1) {
+        i = i[1] + i[0] + i[2] + i[3];
+      } else if (j == 2) {
+        i = i[2] + i[0] + i[1] + i[3];
+      } else if (j == 3) {
+        i = i[3] + i[0] + i[1] + i[2];
+      }
+      
+      entry = i.slice(0);
+      solved = verifyEntry();
+      for(let k = 0; k <= 2; k++) {
+        if (!solved) {
+          entry = (i = i[0] + i[1] + i[3] + i[2]).slice(0);
+          solved = verifyEntry();
+          if (k == 2) {
+            break;
+          }
+          if (!solved) {
+            entry = (i = i[0] + i[2] + i[1] + i[3]).slice(0);
+            solved = verifyEntry();
+          } else {
+            break;
+          }
+        } else {
+          break;
+        }
+      }
+      if (solved) {
+        break;
+      }
+    }
+    if (solved) {
+      break;
+    }
+  }
   event.preventDefault();
 }
 
