@@ -16,7 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 "use strict";
 
-let pin, entry, entries, status;
+let pin, entry, entries, status, silent;
 let buttons = [];
 let lcd = document.getElementById("lcd");
 let resetDisplayTimeout;
@@ -88,7 +88,10 @@ function initGame() {
   highlightKeys();
 }
 
-function verifyEntry() {
+function verifyEntry(fiatEntry) {
+  if (fiatEntry) {
+    entry = fiatEntry;
+  }
   if (entry == pin) {
     lcd.textContent = "Access Granted";
     lcd.style.backgroundColor = "green";
@@ -96,7 +99,9 @@ function verifyEntry() {
     updateEntries();
     status = "PIN " + pin + " cracked in " + entries.length +
       " attempt" + (entries.length > 1 ? "s" : "");
-    alert(status);
+    if (!silent) {
+      alert(status);
+    }
     initGame();
     return true;
   } else {
@@ -121,40 +126,48 @@ function about(event) {
     "\n" +
     "A pointless diversion by Nicholas D. Horne\n" +
     "\n" +
-    "Can you actually crack a four-digit PIN on your\n" +
-    "first attempt as seen in the movies on a telltale\n" +
-    "worn keypad? The \"worn\" keys contained in the\n" +
-    "PIN have been highlighted on the keypad. PINs\n" +
-    "are four digits in length. Digits may be repeated\n" +
-    "resulting in PINs with less than four keys being\n" +
-    "highlighted. PINs may begin with zero. Input is\n" +
-    "accepted by way of both mouse primary button\n" +
+    "Crack a PIN knowing the digits that the PIN comprises\n" +
+    "\n" +
+    "Can you actually crack a four-digit PIN on your " +
+    "first attempt as seen in the movies on a telltale " +
+    "worn keypad? The \"worn\" keys contained in the " +
+    "PIN have been highlighted on the keypad. PINs " +
+    "are four digits in length. Digits may be repeated " +
+    "resulting in PINs with less than four keys being " +
+    "highlighted. PINs may begin with zero. Input is " +
+    "accepted by way of both mouse primary button " +
     "and keyboard number keys.\n" +
     "\n" +
-    "Source available at https://github.com/ndhorne";
+    "GNU GPLv3 licensed source code available at " +
+    "https://github.com/ndhorne/access-granted-js";
   alert(aboutText);
   event.preventDefault();
 }
 
-function autoSolve(event) {
+function getUniqueDigits() {
   let uniqueDigits = [];
-  let inferences = [];
-  let solved = false;
   
-  for (let i = 0; i <= 9; i++) {
+  for (let i = 0; i < 10; i++) {
     if (pin.includes(i) && !uniqueDigits.includes(i)) {
       uniqueDigits.push(i);
     }
   }
   
+  return uniqueDigits;
+}
+
+function inferAbsentDigits() {
+  let uniqueDigits = getUniqueDigits();
+  let inferences = [];
+  
   if (uniqueDigits.length == 4) {
     inferences.push(uniqueDigits.join(""));
   } else if (uniqueDigits.length == 3) {
-    for (let i = 0; i <= 2; i++) {
+    for (let i = 0; i < 3; i++) {
       inferences.push(uniqueDigits.join("") + uniqueDigits[i]);
     }
   } else if (uniqueDigits.length == 2) {
-    for (let i = 0; i <= 1; i++) {
+    for (let i = 0; i < 2; i++) {
       inferences.push(uniqueDigits.join("") + uniqueDigits[i] +
         uniqueDigits[i]);
     }
@@ -167,34 +180,46 @@ function autoSolve(event) {
     console.log("uniqueDigits has bad length");
   }
   
+  return inferences;
+}
+
+function autoSolveSequential(event) {
+  let inferences = inferAbsentDigits();
+  let solved = false;
+  
   for (let inference of inferences) {
-    let i;
     
-    for(let j = 0; j <= 3; j++) {
-      i = inference.slice(0);
+    for (let i = 0; i < 4; i++) {
+      let base = inference;
+      let current;
       
-      if (j == 1) {
-        i = i[1] + i[0] + i[2] + i[3];
-      } else if (j == 2) {
-        i = i[2] + i[0] + i[1] + i[3];
-      } else if (j == 3) {
-        i = i[3] + i[0] + i[1] + i[2];
+      if (i == 0) {
+        current = base;
+      } else if (i == 1) {
+        current = base[1] + base[0] + base[2] + base[3];
+      } else if (i == 2) {
+        current = base[2] + base[0] + base[1] + base[3];
+      } else if (i == 3) {
+        current = base[3] + base[0] + base[1] + base[2];
       }
       
-      entry = i.slice(0);
-      solved = verifyEntry();
-      for(let k = 0; k <= 2; k++) {
+      solved = verifyEntry(current);
+      for (let j = 0; j < 3; j++) {
         if (!solved) {
-          entry = (i = i[0] + i[1] + i[3] + i[2]).slice(0);
-          solved = verifyEntry();
-          if (k == 2) {
-            break;
+          current = current[0] + current[1] + current[3] + current[2];
+          if (!entries.includes(current)) {
+            solved = verifyEntry(current);
           }
-          if (!solved) {
-            entry = (i = i[0] + i[2] + i[1] + i[3]).slice(0);
-            solved = verifyEntry();
-          } else {
+        } else {
+          break;
+        }
+        if (j == 2) {
             break;
+        }
+        if (!solved) {
+          current = current[0] + current[2] + current[1] + current[3];
+          if (!entries.includes(current)) {
+            solved = verifyEntry(current);
           }
         } else {
           break;
@@ -209,6 +234,178 @@ function autoSolve(event) {
     }
   }
   event.preventDefault();
+}
+
+function autoSolveSequential2(event) {
+  let inferences = inferAbsentDigits();
+  let permutations = [];
+  let solved = false;
+  
+  for (let inference of inferences) {
+    
+    for (let i = 0; i < 4; i++) {
+      let base = inference;
+      let current;
+      
+      if (i == 0) {
+        current = base;
+      } else if (i == 1) {
+        current = base[1] + base[0] + base[2] + base[3];
+      } else if (i == 2) {
+        current = base[2] + base[0] + base[1] + base[3];
+      } else if (i == 3) {
+        current = base[3] + base[0] + base[1] + base[2];
+      }
+      
+      permutations.push(current);
+      for (let j = 0; j < 3; j++) {
+        current = current[0] + current[1] + current[3] + current[2];
+        if (!permutations.includes(current)) {
+          permutations.push(current);
+        }
+        if (j == 2) {
+          break;
+        }
+        current = current[0] + current[2] + current[1] + current[3];
+        if (!permutations.includes(current)) {
+          permutations.push(current);
+        }
+      }
+    }
+  }
+  
+  for (let permutation of permutations) {
+    solved = verifyEntry(permutation);
+    if (solved) {
+      break;
+    }
+  }
+  
+  event.preventDefault();
+}
+
+function autoSolveRandom(event) {
+  let uniqueDigits = getUniqueDigits();
+  let inferences = inferAbsentDigits();
+  let solved = false;
+  
+  for (let i = 0; i < inferences.length; i++) {
+    let inference = inferences[i];
+    let maxPermutations;
+    
+    if (uniqueDigits.length == 4) {
+      maxPermutations = 24;
+    }
+    if (uniqueDigits.length == 3) {
+      maxPermutations = 12;
+    }
+    if (uniqueDigits.length == 2 && i <= 1) {
+      maxPermutations = 4;
+    }
+    if (uniqueDigits.length == 2 && i == 2) {
+      maxPermutations = 6;
+    }
+    if (uniqueDigits.length == 1) {
+      maxPermutations = 1;
+    }
+    
+    for (let j = 0; j < maxPermutations; j++) {
+      do {
+        let inferredDigits = inference.split("");
+        entry = "";
+        for (let k = 4; k > 0; k--) {
+          let randomIndex = Math.floor(Math.random() * k);
+          entry += inferredDigits.splice(randomIndex, 1).join("");
+        }
+      } while (entries.includes(entry));
+      
+      solved = verifyEntry();
+      if (solved) {
+        break;
+      }
+    }
+    if (solved) {
+      break;
+    }
+  }
+  event.preventDefault();
+}
+
+function autoSolveRandom2(event) {
+  let uniqueDigits = getUniqueDigits();
+  let solved = false;
+  
+  do {
+    entry = "";
+    for (let i = 0; i < 4; i++) {
+      let randomIndex = Math.floor(Math.random() * uniqueDigits.length);
+      entry += uniqueDigits[randomIndex];
+    }
+    if (!entries.includes(entry)) {
+      solved = verifyEntry();
+    }
+  } while (!solved);
+  event.preventDefault();
+}
+
+function autoSolveRandom3(event) {
+  let solved = false;
+  
+  do {
+    entry = "";
+    for (let i = 0; i < 4; i++) {
+      let randomNumber = Math.floor(Math.random() * 10);
+      entry += randomNumber;
+    }
+    if (!entries.includes(entry)) {
+      solved = verifyEntry();
+    }
+  } while (!solved);
+  event.preventDefault();
+}
+
+function autoSolveBenchmarks() {
+  let startTime, endTime;
+  let benchpin = pinGen();
+  
+  silent = true;
+  
+  pin = benchpin;
+  startTime = Date.now();
+  autoSolveSequential(new CustomEvent("CustomEvent"));
+  endTime = Date.now();
+  console.log("autoSolveSequential  (" + benchpin + ") : " +
+    +(endTime - startTime) + "ms");
+  
+  pin = benchpin;
+  startTime = Date.now();
+  autoSolveSequential2(new CustomEvent("CustomEvent"));
+  endTime = Date.now();
+  console.log("autoSolveSequential2 (" + benchpin + ") : " +
+    +(endTime - startTime) + "ms");
+  
+  pin = benchpin;
+  startTime = Date.now();
+  autoSolveRandom(new CustomEvent("CustomEvent"));
+  endTime = Date.now();
+  console.log("autoSolveRandom      (" + benchpin + ") : " +
+    +(endTime - startTime) + "ms");
+  
+  pin = benchpin;
+  startTime = Date.now();
+  autoSolveRandom2(new CustomEvent("CustomEvent"));
+  endTime = Date.now();
+  console.log("autoSolveRandom2     (" + benchpin + ") : " +
+    +(endTime - startTime) + "ms");
+  
+  pin = benchpin;
+  startTime = Date.now();
+  autoSolveRandom3(new CustomEvent("CustomEvent"));
+  endTime = Date.now();
+  console.log("autoSolveRandom3     (" + benchpin + ") : " +
+    +(endTime - startTime) + "ms");
+  
+  silent = false;
 }
 
 initGame();

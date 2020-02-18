@@ -15,4 +15,5 @@ highlighted. PINs may begin with zero. Input is
 accepted by way of both mouse primary button
 and keyboard number keys.
 
-Source available at https://github.com/ndhorne
+GNU GPLv3 licensed source code available at
+https://github.com/ndhorne/access-granted-js
