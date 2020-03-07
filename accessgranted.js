@@ -21,10 +21,13 @@ let buttons = [];
 let lcd = document.getElementById("lcd");
 let resetDisplayTimeout;
 
+//initializes buttons array with references to button elements
 for (let i = 0; i < 10; i++) {
   buttons[i] = document.getElementById("button" + i);
 }
 
+//wires up button elements with callback function to update entry
+//through forEach higher order function
 buttons.forEach(button => {
   button.addEventListener("click", event => {
     if (entry.length < 4) {
@@ -34,6 +37,7 @@ buttons.forEach(button => {
   });
 });
 
+//wires up keyboard number keys with callback function to update entry
 window.addEventListener("keydown", event => {
   if (/^\d$/.test(event.key)) {
     if (entry.length < 4) {
@@ -43,11 +47,15 @@ window.addEventListener("keydown", event => {
   }
 });
 
+//updates lcd div element with current entry
 function updateDisplay() {
   lcd.style.backgroundColor = "darkgrey";
   lcd.textContent = entry;
 }
 
+//upon key input clears timeout to reset display(if any), updates
+//display with current entry, and when four digits in length verifies
+//entry after half-second timeout
 function keyIn() {
   clearTimeout(resetDisplayTimeout);
   updateDisplay();
@@ -56,6 +64,7 @@ function keyIn() {
   }
 }
 
+//highlights button elements corresponding to keys contained in PIN
 function highlightKeys() {
   buttons.forEach(button => {
     button.style.backgroundColor = "";
@@ -66,10 +75,12 @@ function highlightKeys() {
   }
 }
 
+//updates array of entered entries
 function updateEntries() {
   entries.push(entry);
 }
 
+//returns randomly generated PIN
 function pinGen() {
   //shadow pin binding residing in global scope
   let pin = "";
@@ -81,6 +92,7 @@ function pinGen() {
   return pin;
 }
 
+//initializes new game
 function initGame() {
   pin = pinGen();
   entry = "";
@@ -88,6 +100,10 @@ function initGame() {
   highlightKeys();
 }
 
+//verifies whether entry matches PIN, updates and sets timeout to clear
+//display accordingly, updates array of entered entries, displays win
+//dialog and reinitializes game upon success, clears entry upon failure,
+//returns analogous boolean value for use with auto-solve
 function verifyEntry(fiatEntry) {
   if (fiatEntry) {
     entry = fiatEntry;
@@ -114,12 +130,14 @@ function verifyEntry(fiatEntry) {
   }
 }
 
+//initializes new game and clears display
 function newGame(event) {
   initGame();
   updateDisplay();
   event.preventDefault();
 }
 
+//displays about dialog
 function about(event) {
   let aboutText =
     "Access Granted JS\n" +
@@ -144,6 +162,7 @@ function about(event) {
   event.preventDefault();
 }
 
+//returns array of unique PIN digits
 function getUniqueDigits() {
   let uniqueDigits = [];
   
@@ -156,6 +175,7 @@ function getUniqueDigits() {
   return uniqueDigits;
 }
 
+//returns array of all possible combinations of unique PIN digits
 function inferAbsentDigits() {
   let uniqueDigits = getUniqueDigits();
   let inferences = [];
@@ -183,6 +203,8 @@ function inferAbsentDigits() {
   return inferences;
 }
 
+//sequentially attempts all possible permutations of each combination
+//until solved
 function autoSolveSequential(event) {
   let inferences = inferAbsentDigits();
   let solved = false;
@@ -236,6 +258,8 @@ function autoSolveSequential(event) {
   event.preventDefault();
 }
 
+//sequentially creates array of all possible permutations of each
+//combination and attempts each permutation until solved
 function autoSolveSequential2(event) {
   let inferences = inferAbsentDigits();
   let permutations = [];
@@ -284,6 +308,8 @@ function autoSolveSequential2(event) {
   event.preventDefault();
 }
 
+//randomly generates all possible permutations of each combination and
+//attempts unentered permutations until solved
 function autoSolveRandom(event) {
   let uniqueDigits = getUniqueDigits();
   let inferences = inferAbsentDigits();
@@ -331,6 +357,8 @@ function autoSolveRandom(event) {
   event.preventDefault();
 }
 
+//randomly generates entries from unique PIN digits and attempts
+//unentered entries until solved
 function autoSolveRandom2(event) {
   let uniqueDigits = getUniqueDigits();
   let solved = false;
@@ -348,6 +376,8 @@ function autoSolveRandom2(event) {
   event.preventDefault();
 }
 
+//randomly generates entries from all digits and attempts unentered
+//entries until solved
 function autoSolveRandom3(event) {
   let solved = false;
   
@@ -364,10 +394,12 @@ function autoSolveRandom3(event) {
   event.preventDefault();
 }
 
+//logs to console duration of auto-solve methods in milliseconds
 function autoSolveBenchmarks() {
   let startTime, endTime;
   let benchpin = pinGen();
   
+  //suppress win dialog box
   silent = true;
   
   pin = benchpin;
@@ -408,7 +440,13 @@ function autoSolveBenchmarks() {
   silent = false;
 }
 
-initGame();
+//initializes first game
+function start() {
+  initGame();
+}
+
+//initiate first game
+start();
 
 //display instructions dialog box upon page load
 window.addEventListener("load", event => about(event));
