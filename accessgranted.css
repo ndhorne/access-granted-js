@@ -44,13 +44,9 @@ body {
   margin-bottom: 5px;
 }
 
-#options p {
-  text-align: center;
-}
-
 #logContainer {
   position: relative;
-  width: 1100px;
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -73,13 +69,9 @@ body {
 }
 
 #aboutAnchor {
-  position: absolute;
-  display: inline-block;
-  right: 0;
   color: black;
   font-size: 14px;
   font-weight: bold;
-  padding-top: 2px;
 }
 
 .button {
@@ -101,7 +93,7 @@ body {
   margin-bottom: 5px;
 }
 
-.link {
+.modeButton {
   background-color: lightsteelblue;
   border-radius: 5px;
   padding: 5px;
