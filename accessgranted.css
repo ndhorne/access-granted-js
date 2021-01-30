@@ -4,6 +4,12 @@ body {
   font-size: 16px;
 }
 
+h1 {
+  text-align: center;
+  margin: 10px 10px 20px 10px;
+  font-size: 16px;
+}
+
 #keypadContainer {
   width: 132px;
   height: 151px;
@@ -21,7 +27,7 @@ body {
   width: 132px;
   height: 26px;
   background-color: darkgrey;
-  border-radius: 5px;
+  border-radius: 5px 5px 0 0;
   text-align: center;
   line-height: 26px;
   font-family: Arial, Helvetica, sans-serif;
