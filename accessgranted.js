@@ -50,6 +50,14 @@ let aboutText = [
   "https://github.com/ndhorne/access-granted-js"
 ];
 
+//append individual option element to select element
+function appendSelectOption(selectElement, optionText, optionValue) {
+  let option = document.createElement("option");
+  option.text = optionText;
+  option.value = optionValue;
+  selectElement.add(option);
+}
+
 //append option elements to select element
 function appendSelectOptions(select, ...options) {
   for (let i = 0; i < options.length; i++) {
@@ -230,6 +238,7 @@ function clearHintTimeout() {
   clearTimeout(hintTimeout);
   //rehighlight keys possibly dehighlighted by hintTimeout
   highlightKeys();
+  hintElement.disabled = false;
 }
 
 //upon key input clears timeout to reset display(if any), updates
@@ -476,6 +485,7 @@ function verifyEntry(entryArg) {
     if (!silent) {
       alert(status);
     }
+    
     hintElement.disabled = true;
     autoSolveElement.disabled = true;
     highlightElement(newGameElement, 100);
@@ -597,7 +607,8 @@ function about(event) {
 
 //flash incremental number of keys in pin upon hint request
 function hint(event) {
-  clearHintTimeout();
+  hintElement.disabled = true;
+  
   let keysToFlash = keysRevealed < 4 ? keysRevealed + 1 : keysRevealed;
   let current = 0, logUpdated = false;
   let button = document.getElementById("button" + pin[current]);
@@ -631,6 +642,8 @@ function hint(event) {
                   document.getElementById("button" + pin[current]);
                 flashKey(3);
               }, 500);
+            } else {
+              hintElement.disabled = false;
             }
           }
         }, 250);
