@@ -7,12 +7,12 @@ body {
 h1 {
   text-align: center;
   margin: 10px 10px 20px 10px;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 #keypadContainer {
   width: 132px;
-  height: 151px;
+  height: 165px;
   background-color: lightgrey;
   border-radius: 5px;
   margin: auto;
@@ -20,7 +20,7 @@ h1 {
 
 #keypad {
   width: 101px;
-  margin: 3px auto;
+  margin: 4px auto;
 }
 
 #lcd {
@@ -85,21 +85,23 @@ h1 {
   background-color: darkgrey;
   border-radius: 5px;
   margin-bottom: 3px;
-  font-size: 18px;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .row {
   text-align: center;
 }
 
-#links {
-  width: 132px;
+#cheats {
+  width: 134px;
   margin: 8px auto;
   text-align: center;
   margin-bottom: 5px;
 }
 
-.modeButton {
+.gameButton {
   background-color: lightsteelblue;
   border-radius: 5px;
   padding: 5px;
