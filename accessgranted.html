@@ -1,15 +1,22 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="description" content="Can you actually crack a four-digit PIN on your first attempt as seen in the movies on a telltale worn keypad?">
+    <meta name="author" content="Nicholas Horne">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
       Access Granted JS
     </title>
-    <link href="accessgranted.css" rel="stylesheet" type="text/css" />
+    <link href="accessgranted.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron&family=Open+Sans&family=Noto+Sans&display=swap"
+      rel="stylesheet"
+    >
   </head>
   
   <body>
-    
     <div id="container">
       <h1>
         Access Granted JS
@@ -55,7 +62,9 @@
       </div>
       
       <div id="options">
-        <label for="mode">Game Mode:</label>
+        <label for="mode">
+          Game Mode:
+        </label>
         <select id="mode" name="mode">
           <option>Crack the Code</option>
           <option>Lockout</option>
@@ -69,18 +78,23 @@
       </div>
       
       <div style="text-align: center; font-size: 14px;">
-        <input type="checkbox" id="autoNew" name="autoNew" />
-        <label for="autoNew" style="vertical-align: 25%;"
-          title="Automatically start new game upon win/loss">
+        <input type="checkbox" id="autoNew" name="autoNew">
+        <label for="autoNew" style="vertical-align: 15%;"
+          title="Automatically start new game upon win/loss"
+        >
           Autostart new game
         </label>
       </div>
       
       <div id="logContainer">
-        <p id="logLabel">log_</p>
+        <p id="logLabel">
+          log_
+        </p>
         <div id="log"></div>
         <p style="text-align: right; margin-top: 0;">
-          <a href="" onclick="about(event)" id="aboutAnchor">About</a>
+          <a href="" onclick="about(event)" id="aboutAnchor">
+            About
+          </a>
         </p>
       </div>
     
