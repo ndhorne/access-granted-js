@@ -1,21 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="description" content="Can you actually crack a four-digit PIN on your first attempt as seen in the movies on a telltale worn keypad?">
-    <meta name="author" content="Nicholas Horne">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      Access Granted JS
-    </title>
-    <link href="accessgranted.css" rel="stylesheet" type="text/css">
-  </head>
-  
-  <body>
-    <div id="container">
-      <h1>
-        Access Granted JS
-      </h1>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Can you actually crack a four-digit PIN on your first attempt as seen in the movies on a telltale worn keypad?">
+  <meta name="author" content="Nicholas Horne">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Access Granted JS</title>
+  <link href="accessgranted.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <main>
+      <h1>Access Granted JS</h1>
       
       <div id="keypadContainer">
         <div id="lcd">
@@ -44,41 +41,45 @@
       </div>
       
       <div id="cheats">
-        <button type="button" id="hintButton" class="gameButton"
+        <button
+          type="button"
+          id="hintButton"
+          class="gameButton"
           onclick="hint(event)"
-        >
-          Hint
-        </button>
-        <button type="button" id="autoSolveButton" class="gameButton"
+        >Hint</button>
+        
+        <button
+          type="button"
+          id="autoSolveButton"
+          class="gameButton"
           onclick="autoSolveSequential(event)"
-        >
-          Auto-Solve
-        </button>
+        >Auto-Solve</button>
       </div>
       
       <div id="options">
-        <label for="mode">
-          Game Mode:
-        </label>
+        <label for="mode">Game Mode:</label>
         <select id="mode" name="mode">
           <option>Crack the Code</option>
           <option>Lockout</option>
           <option>Beat the Clock</option>
         </select>
-        <button type="button" id="newGameButton" class="gameButton"
+        
+        <button
+          type="button"
+          id="newGameButton"
+          class="gameButton"
           onclick="newGame(event)"
-          style="display: block; margin: 7px auto auto;">
-          New Game
-        </button>
+          style="display: block; margin: 7px auto auto;"
+        >New Game</button>
       </div>
       
       <div style="text-align: center; font-size: 14px;">
         <input type="checkbox" id="autoNew" name="autoNew">
-        <label for="autoNew" style="vertical-align: 15%;"
+        <label
+          for="autoNew"
+          style="vertical-align: 15%;"
           title="Automatically start new game upon win/loss"
-        >
-          Autostart new game
-        </label>
+        >Autostart new game</label>
       </div>
       
       <div id="logContainer">
@@ -87,13 +88,113 @@
         </p>
         <div id="log"></div>
         <p style="text-align: right; margin-top: 0;">
-          <a href="" onclick="about(event)" id="aboutAnchor">
-            About
-          </a>
+          <a href="" onclick="about(event)" id="aboutAnchor">About</a>
         </p>
       </div>
+    </main>
+  
+  </div>
+  
+  <!-- Access Granted Modal -->
+  <div id="accessGrantedModal" class="modal">
     
-    </div>
-    <script src="accessgranted.js"></script>
-  </body>
+    <!-- Modal content -->
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <!--
+        <span class="close">&times;</span>
+        -->
+        
+        <h2>Access Granted</h2>
+      </div>
+      
+      <div class="modal-body">
+        <p id="accessGrantedModalText"></p>
+      </div> <!-- .modal-body -->
+      
+      <div class="modal-footer">
+        <button
+          type="button"
+          id="accessGrantedOK"
+          class="gameButton"
+        >OK</button>
+      </div>
+      
+    </div> <!-- .modal-content -->
+    
+  </div> <!-- #accessGrantedModal -->
+  
+  <!-- About Modal -->
+  <div id="aboutModal" class="modal">
+    
+    <!-- Modal content -->
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <!--
+        <span class="close">&times;</span>
+        -->
+        
+        <h2>About</h2>
+      </div>
+      
+      <div class="modal-body">
+        <p>
+          Access Granted JS
+        </p>
+        
+        <p>
+          A pointless diversion by Nicholas D. Horne
+        </p>
+        
+        <p>
+          Crack a PIN knowing the digits that the PIN comprises
+        </p>
+        
+        <p>
+          Can you actually crack a four-digit PIN on your first attempt as seen in the movies on a telltale worn keypad? The "worn" keys contained in the PIN have been highlighted on the keypad. PINs are four digits in length. Digits may be repeated resulting in PINs with less than four keys being highlighted. PINs may begin with zero. Input is accepted by way of both mouse primary button and keyboard number keys.
+        </p>
+        
+        <p>
+          GNU GPLv3 licensed source code available at <a href="https://github.com/ndhorne/access-granted-js" target="_blank">https://github.com/ndhorne/access-granted-js</a>
+        </p>
+      </div> <!-- .modal-body -->
+      
+      <div class="modal-footer">
+        <button type="button" id="aboutOK" class="gameButton">OK</button>
+      </div>
+      
+    </div> <!-- .modal-content -->
+    
+  </div> <!-- #aboutModal -->
+  
+  <!-- Error Modal -->
+  <div id="errorModal" class="modal">
+    
+    <!-- Modal content -->
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <!--
+        <span class="close">&times;</span>
+        -->
+        
+        <h2 id="errorModalHeader"></h2>
+      </div>
+      
+      <div class="modal-body">
+        <p id="errorModalText"></p>
+      </div> <!-- .modal-body -->
+      
+      <div class="modal-footer">
+        <button type="button" id="errorModalOK" class="gameButton">OK</button>
+      </div>
+      
+    </div> <!-- .modal-content -->
+    
+  </div> <!-- #errorModal -->
+  
+  <script src="accessgranted.js"></script>
+</body>
 </html>
