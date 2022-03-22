@@ -95,35 +95,29 @@
   
   </div>
   
-  <!-- Access Granted Modal -->
-  <div id="accessGrantedModal" class="modal">
+  <!-- Win Modal -->
+  <div id="winModal" class="modal">
     
     <!-- Modal content -->
     <div class="modal-content">
       
       <div class="modal-header">
-        <!--
-        <span class="close">&times;</span>
-        -->
+        <span id="closeWinModal" class="close">&times;</span>
         
         <h2>Access Granted</h2>
       </div>
       
       <div class="modal-body">
-        <p id="accessGrantedModalText"></p>
+        <p id="winModalText"></p>
       </div> <!-- .modal-body -->
       
       <div class="modal-footer">
-        <button
-          type="button"
-          id="accessGrantedOK"
-          class="gameButton"
-        >OK</button>
+        <!-- <button type="button" id="winOK" class="gameButton">OK</button> -->
       </div>
       
     </div> <!-- .modal-content -->
     
-  </div> <!-- #accessGrantedModal -->
+  </div> <!-- #winModal -->
   
   <!-- About Modal -->
   <div id="aboutModal" class="modal">
@@ -132,9 +126,7 @@
     <div class="modal-content">
       
       <div class="modal-header">
-        <!--
-        <span class="close">&times;</span>
-        -->
+        <span id="closeAbout" class="close">&times;</span>
         
         <h2>About</h2>
       </div>
@@ -162,7 +154,9 @@
       </div> <!-- .modal-body -->
       
       <div class="modal-footer">
+        <!--
         <button type="button" id="aboutOK" class="gameButton">OK</button>
+        -->
       </div>
       
     </div> <!-- .modal-content -->
@@ -176,9 +170,7 @@
     <div class="modal-content">
       
       <div class="modal-header">
-        <!--
-        <span class="close">&times;</span>
-        -->
+        <span id="closeErrorModal" class="close">&times;</span>
         
         <h2 id="errorModalHeader"></h2>
       </div>
@@ -188,7 +180,9 @@
       </div> <!-- .modal-body -->
       
       <div class="modal-footer">
+        <!--
         <button type="button" id="errorModalOK" class="gameButton">OK</button>
+        -->
       </div>
       
     </div> <!-- .modal-content -->
