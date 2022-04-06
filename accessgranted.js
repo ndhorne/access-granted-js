@@ -777,7 +777,7 @@ function verifyEntry(entryArg) {
         playAgainModalHeader.innerHTML = "Access Granted";
         playAgainModalText.innerHTML = status;
         playAgainModal.style.display = "block";
-      }, 1000);
+      }, 750);
     }
     
     hintElement.disabled = true;
@@ -866,7 +866,7 @@ function verifyEntry(entryArg) {
             "LOCKED! Allotted number of entry attempts exhausted."
           ;
           playAgainModal.style.display = "block";
-        }, 1000);
+        }, 750);
         
         /*
         if (autoNew) {
@@ -912,7 +912,7 @@ function verifyEntry(entryArg) {
                 + " has expired."
               ;
               playAgainModal.style.display = "block";
-            }, 1000);
+            }, 750);
             
             /*
             if (autoNew) {
@@ -935,7 +935,11 @@ function newGame(event) {
   initGame();
   
   if (window.scrollY > document.getElementById("keypadContainer").offsetTop) {
-    document.getElementsByTagName("html")[0].scrollIntoView();
+    document.getElementById("keypadContainer").scrollIntoView(
+      {
+        behavior: "smooth"
+      }
+    );
   }
   
   event.preventDefault();
@@ -1283,6 +1287,20 @@ function autoSolveBenchmarks() {
   
   silent = false;
 }
+
+mode1CustomInput.addEventListener("keyup", event => {
+  if (event.keyCode === 13) {
+      mode1CustomInput.blur();
+      newGame(new CustomEvent("CustomEvent"));
+    }
+}, false);
+
+mode2CustomInput.addEventListener("keyup", event => {
+  if (event.keyCode === 13) {
+      mode2CustomInput.blur();
+      newGame(new CustomEvent("CustomEvent"));
+    }
+}, false);
 
 window.addEventListener("click", event => {
   if (event.target == aboutModal) {
